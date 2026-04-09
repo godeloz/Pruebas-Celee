@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller de comprensión lectora — Sesión 1</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent: #0F6E56; --accent-light: #E1F5EE; --accent-mid: #1D9E75;
+    --amber: #BA7517; --amber-light: #FAEEDA;
+    --coral: #993C1D; --coral-light: #FAECE7;
+    --blue: #185FA5; --blue-light: #E6F1FB;
+    --bg: #ffffff; --bg-secondary: #f5f4f0; --text: #1a1a1a; --text-muted: #6b6b68;
+    --border: rgba(0,0,0,0.12); --border-secondary: rgba(0,0,0,0.22);
+    --radius-md: 8px; --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18; --bg-secondary: #242422; --text: #f0ede8; --text-muted: #9a9893;
+      --border: rgba(255,255,255,0.12); --border-secondary: rgba(255,255,255,0.22);
+      --accent-light: #04342C; --amber-light: #412402; --coral-light: #4A1B0C; --blue-light: #042C53;
+      --accent: #5DCAA5; --amber: #EF9F27; --coral: #F0997B; --blue: #85B7EB;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; padding: 2rem 1rem; }
+  .container { max-width: 780px; margin: 0 auto; }
+  .page-title { font-size: 22px; font-weight: 500; margin-bottom: 0.25rem; color: var(--text); }
+  .page-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 2rem; }
+  .header-strip { background: var(--accent-light); border-left: 4px solid var(--accent); padding: 1rem 1.25rem; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 1.5rem; }
+  .header-strip h2 { font-size: 15px; font-weight: 500; color: var(--accent); margin-bottom: 2px; }
+  .header-strip p { font-size: 13px; color: var(--text-muted); }
+  .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .meta-card { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 0.75rem 1rem; }
+  .meta-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .meta-card .val { font-size: 15px; font-weight: 500; color: var(--text); }
+  .section { margin-bottom: 2rem; }
+  .section-title { font-size: 13px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
+  .bloque { border: 0.5px solid var(--border); border-radius: var(--radius-lg); background: var(--bg); margin-bottom: 1rem; overflow: hidden; }
+  .bloque-header { display: flex; align-items: center; gap: 12px; padding: 0.875rem 1.25rem; cursor: pointer; user-select: none; }
+  .bloque-header:hover { background: var(--bg-secondary); }
+  .tiempo-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+  .b1 .tiempo-badge { background: var(--blue-light); color: var(--blue); }
+  .b2 .tiempo-badge { background: var(--amber-light); color: var(--amber); }
+  .b3 .tiempo-badge { background: var(--accent-light); color: var(--accent); }
+  .b4 .tiempo-badge { background: var(--coral-light); color: var(--coral); }
+  .bloque-titulo { font-size: 15px; font-weight: 500; color: var(--text); flex: 1; }
+  .bloque-sub { font-size: 12px; color: var(--text-muted); }
+  .chevron { font-size: 12px; color: var(--text-muted); transition: transform 0.2s; display: inline-block; }
+  .chevron.open { transform: rotate(180deg); }
+  .bloque-body { padding: 0 1.25rem 1.25rem; display: none; }
+  .bloque-body.open { display: block; }
+  .objetivo { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 13px; color: var(--text-muted); }
+  .objetivo strong { color: var(--text); font-weight: 500; }
+  .texto-base { border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.125rem; margin-bottom: 1rem; font-size: 14px; line-height: 1.7; color: var(--text); }
+  .texto-base .titulo-texto { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+  .actividad { margin-bottom: 1rem; }
+  .act-label { font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 0.5rem; }
+  .pregunta { font-size: 14px; color: var(--text); margin-bottom: 0.5rem; padding: 0.5rem 0.75rem; border-left: 2px solid var(--border-secondary); }
+  .opciones { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0.75rem; }
+  .opcion { font-size: 13px; padding: 0.5rem 0.875rem; border-radius: var(--radius-md); border: 0.5px solid var(--border); cursor: pointer; color: var(--text); background: var(--bg); transition: background 0.15s; text-align: left; }
+  .opcion:hover { background: var(--bg-secondary); }
+  .opcion.correcta { background: var(--accent-light); border-color: var(--accent-mid); color: var(--accent); }
+  .opcion.incorrecta { background: #FCEBEB; border-color: #E24B4A; color: #501313; }
+  @media (prefers-color-scheme: dark) {
+    .opcion.incorrecta { background: #501313; border-color: #E24B4A; color: #F7C1C1; }
+  }
+  .feedback { font-size: 13px; padding: 0.5rem 0.875rem; border-radius: var(--radius-md); margin-top: 4px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.ok { background: var(--accent-light); color: var(--accent); }
+  .feedback.mal { background: #FCEBEB; color: #501313; }
+  @media (prefers-color-scheme: dark) { .feedback.mal { background: #501313; color: #F7C1C1; } }
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 1rem 0; }
+  .nota-facilitador { background: var(--amber-light); border-left: 3px solid var(--amber); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 0.75rem 1rem; font-size: 13px; color: var(--text); margin-top: 0.75rem; }
+  .nota-facilitador strong { font-weight: 500; }
+  .estrategia { font-size: 13px; margin-bottom: 0.5rem; padding: 0.375rem 0; border-bottom: 0.5px solid var(--border); color: var(--text); }
+  .estrategia:last-child { border-bottom: none; }
+  .estrategia .paso { font-weight: 500; color: var(--accent); margin-right: 8px; }
+  .timeline { display: flex; gap: 0; margin: 1rem 0; border-radius: var(--radius-md); overflow: hidden; border: 0.5px solid var(--border); }
+  .t-bloque { flex: 1; padding: 0.5rem; text-align: center; }
+  .t-bloque .t-min { font-size: 14px; font-weight: 500; }
+  .t-bloque .t-nom { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+  .tb1 { background: var(--blue-light); color: var(--blue); }
+  .tb2 { background: var(--amber-light); color: var(--amber); }
+  .tb3 { background: var(--accent-light); color: var(--accent); }
+  .tb4 { background: var(--coral-light); color: var(--coral); }
+  .input-abierta { width: 100%; border: 0.5px solid var(--border-secondary); border-radius: var(--radius-md); padding: 0.5rem 0.75rem; font-size: 13px; font-family: inherit; color: var(--text); background: var(--bg); resize: vertical; min-height: 60px; margin-top: 6px; }
+  .chip { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; margin: 2px; }
+  .chip-teal { background: var(--accent-light); color: var(--accent); }
+  .chip-blue { background: var(--blue-light); color: var(--blue); }
+  .chip-amber { background: var(--amber-light); color: var(--amber); }
+  .chips { margin-bottom: 0.75rem; }
+  .print-note { font-size: 12px; color: var(--text-muted); text-align: right; margin-bottom: 1.5rem; }
+  @media print {
+    .bloque-body { display: block !important; }
+    .chevron { display: none; }
+    .bloque-header { cursor: default; }
+    .print-note { display: none; }
+    .opcion { border: 0.5px solid #ccc; }
+    body { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1 class="page-title">Taller de comprensión lectora — Sesión 1</h1>
+  <p class="page-sub">Programa PLEE · Universidad EAFIT · Guía del facilitador</p>
+  <p class="print-note">Imprime este documento para usarlo offline, o ábrelo en el navegador para la versión interactiva.</p>
+
+  <div class="header-strip">
+    <h2>Taller de comprensión lectora — Sesión 1</h2>
+    <p>Programa PLEE · Universidad EAFIT · Guía del facilitador</p>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-card"><div class="label">Duración</div><div class="val">60 minutos</div></div>
+    <div class="meta-card"><div class="label">Participantes</div><div class="val">12 estudiantes</div></div>
+    <div class="meta-card"><div class="label">Modalidad</div><div class="val">Colectiva</div></div>
+    <div class="meta-card"><div class="label">Punto de partida</div><div class="val">1 / 5 en lectura</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Distribución del tiempo</div>
+    <div class="timeline">
+      <div class="t-bloque tb1"><div class="t-min">10'</div><div class="t-nom">Encuadre</div></div>
+      <div class="t-bloque tb2"><div class="t-min">15'</div><div class="t-nom">Bloque 1</div></div>
+      <div class="t-bloque tb3"><div class="t-min">20'</div><div class="t-nom">Bloque 2</div></div>
+      <div class="t-bloque tb4"><div class="t-min">15'</div><div class="t-nom">Bloque 3 + cierre</div></div>
+    </div>
+  </div>
+
+  <!-- ENCUADRE -->
+  <div class="section">
+    <div class="section-title">Encuadre inicial (10 min)</div>
+    <div class="bloque">
+      <div class="bloque-header" onclick="toggle(this)">
+        <span class="bloque-titulo">¿Qué pasa cuando leemos?</span>
+        <span class="bloque-sub">Activación + diagnóstico</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="bloque-body open">
+        <div class="objetivo">El facilitador presenta <strong>3 preguntas diagnósticas</strong> para activar lo que los estudiantes ya saben y anclar la sesión en sus dificultades reales.</div>
+        <div class="estrategia"><span class="paso">1.</span> Pedir a 3–4 estudiantes que describan con sus palabras qué hacen cuando no entienden un texto. Anotar en el tablero (palabras clave).</div>
+        <div class="estrategia"><span class="paso">2.</span> Mostrar en pantalla: "Leer no es solo decodificar palabras. Es construir significado." Preguntar: ¿qué diferencia hay?</div>
+        <div class="estrategia"><span class="paso">3.</span> Presentar el objetivo del taller: identificar tema, idea central e intención del autor. Estas son las tres competencias base de la prueba PLEE N1.</div>
+        <div class="nota-facilitador"><strong>Nota:</strong> No explicar aún los conceptos. El objetivo es hacer visible la brecha entre lo que los estudiantes creen que hacen al leer y lo que realmente implica comprender.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 1 -->
+  <div class="section">
+    <div class="section-title">Bloque 1 · Tema e idea central (15 min)</div>
+    <div class="bloque b2">
+      <div class="bloque-header" onclick="toggle(this)">
+        <span class="tiempo-badge">15 min</span>
+        <span class="bloque-titulo">¿De qué trata? ¿Qué dice exactamente?</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="bloque-body open">
+        <div class="chips">
+          <span class="chip chip-blue">Competencia I-1a</span>
+          <span class="chip chip-blue">Competencia I-1b</span>
+        </div>
+        <div class="objetivo"><strong>Distinción clave:</strong> el <em>tema</em> es de qué trata el texto (un concepto o asunto). La <em>idea central</em> es lo que el autor dice sobre ese tema (una afirmación).</div>
+
+        <div class="texto-base">
+          <div class="titulo-texto">Texto A · Lectura en voz alta grupal</div>
+          El agua potable es un recurso cada vez más escaso en las ciudades latinoamericanas. Aunque muchas personas dan por sentado abrir un grifo y obtener agua limpia, en realidad más del 30 % de los residentes urbanos de la región enfrentan cortes frecuentes o acceso limitado. Las causas son múltiples: infraestructura envejecida, mal manejo de cuencas y el aumento de la población. Sin una política pública articulada, la crisis se agravará en las próximas décadas.
+        </div>
+
+        <div class="actividad">
+          <div class="act-label">Ejercicio 1-A · Selección múltiple colectiva</div>
+          <div class="pregunta">¿Cuál es el tema del texto?</div>
+          <div class="opciones" id="q1">
+            <button class="opcion" onclick="responder(this,'q1',false,'El texto habla de agua, pero el tema preciso no es simplemente "el agua", sino la escasez de agua potable en ciudades.')">a) El agua</button>
+            <button class="opcion" onclick="responder(this,'q1',true,'Correcto. El tema es un asunto específico, no una palabra suelta.')">b) La escasez de agua potable en ciudades latinoamericanas</button>
+            <button class="opcion" onclick="responder(this,'q1',false,'Eso es una causa mencionada, no el asunto central del texto.')">c) La infraestructura urbana deficiente</button>
+            <button class="opcion" onclick="responder(this,'q1',false,'Eso es una consecuencia futura, no el tema.')">d) La política pública del agua</button>
+          </div>
+          <div class="feedback" id="q1-fb"></div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="actividad">
+          <div class="act-label">Ejercicio 1-B · Selección múltiple colectiva</div>
+          <div class="pregunta">¿Cuál es la idea central del texto?</div>
+          <div class="opciones" id="q2">
+            <button class="opcion" onclick="responder(this,'q2',false,'Eso es un dato de apoyo, no la tesis.')">a) El 30 % de los residentes no tiene acceso continuo al agua.</button>
+            <button class="opcion" onclick="responder(this,'q2',false,'Eso describe causas, pero no es la afirmación principal.')">b) La infraestructura envejecida y el crecimiento poblacional causan la escasez.</button>
+            <button class="opcion" onclick="responder(this,'q2',true,'Correcto. La idea central conecta el problema con su solución (o falta de ella): sin política articulada, la crisis empeorará.')">c) La escasez de agua potable en ciudades latinoamericanas es una crisis que se agravará sin políticas públicas articuladas.</button>
+            <button class="opcion" onclick="responder(this,'q2',false,'Esta es la primera oración, pero no resume la afirmación completa del autor.')">d) El agua potable es un recurso cada vez más escaso.</button>
+          </div>
+          <div class="feedback" id="q2-fb"></div>
+        </div>
+
+        <div class="nota-facilitador"><strong>Pausa de metacognición (2 min):</strong> pedir que digan en voz alta la diferencia entre tema e idea central con sus propias palabras. Corregir colectivamente antes de avanzar.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="section">
+    <div class="section-title">Bloque 2 · Intención comunicativa y posición del autor (20 min)</div>
+    <div class="bloque b3">
+      <div class="bloque-header" onclick="toggle(this)">
+        <span class="tiempo-badge">20 min</span>
+        <span class="bloque-titulo">¿Para qué escribe el autor? ¿Qué postura tiene?</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="bloque-body open">
+        <div class="chips">
+          <span class="chip chip-teal">Competencia I-2d</span>
+          <span class="chip chip-teal">Competencia II-1e (intención)</span>
+        </div>
+        <div class="objetivo"><strong>Conceptos clave:</strong> la intención puede ser <em>informar</em>, <em>persuadir</em>, <em>advertir</em> o <em>criticar</em>. La posición del autor es el punto de vista que adopta frente al tema.</div>
+
+        <div class="texto-base">
+          <div class="titulo-texto">Texto B · Lectura individual (2 min) + discusión grupal</div>
+          El uso de teléfonos celulares en el salón de clase ha generado un debate legítimo entre educadores. Quienes defienden la prohibición argumentan que los dispositivos distraen y fragmentan la atención. Sin embargo, restringir su uso sin ofrecer alternativas pedagógicas no resuelve el problema de fondo: los estudiantes no han desarrollado la habilidad de gestionar sus propias distracciones. Prohibir es más fácil que enseñar, pero también menos efectivo a largo plazo.
+        </div>
+
+        <div class="actividad">
+          <div class="act-label">Ejercicio 2-A · Selección múltiple</div>
+          <div class="pregunta">¿Cuál es la intención comunicativa del autor?</div>
+          <div class="opciones" id="q3">
+            <button class="opcion" onclick="responder(this,'q3',false,'El autor no solo informa; toma una postura clara.')">a) Informar sobre los pros y contras del celular en clase.</button>
+            <button class="opcion" onclick="responder(this,'q3',true,'Correcto. El autor argumenta que prohibir es una solución superficial, defendiendo una alternativa pedagógica.')">b) Criticar la prohibición de celulares como solución insuficiente y argumentar a favor de enseñar autorregulación.</button>
+            <button class="opcion" onclick="responder(this,'q3',false,'El autor menciona esta posición, pero para refutarla.')">c) Defender la prohibición del celular en el aula.</button>
+            <button class="opcion" onclick="responder(this,'q3',false,'El texto no propone un estudio ni usa modo descriptivo neutral.')">d) Describir un estudio sobre el uso de celulares en educación.</button>
+          </div>
+          <div class="feedback" id="q3-fb"></div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="actividad">
+          <div class="act-label">Ejercicio 2-B · Reflexión escrita individual (5 min) + puesta en común</div>
+          <div class="pregunta">Identifica en el Texto B una frase que revele la posición del autor. Escríbela y explica por qué la elegiste.</div>
+          <textarea class="input-abierta" placeholder="Ejemplo: 'Prohibir es más fácil que enseñar, pero también menos efectivo a largo plazo.' Esta frase muestra que el autor..."></textarea>
+        </div>
+
+        <div class="nota-facilitador"><strong>Estrategia de andamiaje:</strong> si el grupo tiene dificultad, guiar con preguntas: "¿el autor está a favor o en contra de la prohibición? ¿Cómo lo sabes? ¿Qué palabras te lo indican?" Las palabras valorativas (fácil, efectivo, legítimo) son marcas de posición.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="section">
+    <div class="section-title">Bloque 3 · Aplicación integradora + cierre (15 min)</div>
+    <div class="bloque b4">
+      <div class="bloque-header" onclick="toggle(this)">
+        <span class="tiempo-badge">15 min</span>
+        <span class="bloque-titulo">Las tres preguntas en un solo texto</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="bloque-body open">
+        <div class="chips">
+          <span class="chip chip-amber">Integración de competencias I y II</span>
+        </div>
+        <div class="objetivo">Los estudiantes aplican las tres habilidades (tema, idea central, intención) sobre un texto nuevo, en pequeños grupos de 3.</div>
+
+        <div class="texto-base">
+          <div class="titulo-texto">Texto C · Trabajo en grupos de 3 (6 min)</div>
+          Los jóvenes de hoy leen más que ninguna generación anterior, pero de formas diferentes. Consumen noticias, hilos en redes sociales, subtítulos de videos y comentarios en foros. El problema no es la cantidad, sino la profundidad: leer muchos fragmentos no desarrolla la capacidad de sostener un argumento extenso ni de relacionar ideas complejas. Las universidades no pueden ignorar este cambio y deben adaptar sus estrategias de enseñanza de la lectura, no para reemplazar los textos largos, sino para conectarlos con las prácticas lectoras que los estudiantes ya tienen.
+        </div>
+
+        <div class="actividad">
+          <div class="act-label">Tarea grupal · Responder las tres preguntas en voz alta o escrito</div>
+          <div class="pregunta">¿Cuál es el tema del texto C?</div>
+          <div class="opciones" id="q4">
+            <button class="opcion" onclick="responder(this,'q4',false,'Las redes sociales son solo un ejemplo, no el tema central.')">a) Las redes sociales y los jóvenes.</button>
+            <button class="opcion" onclick="responder(this,'q4',false,'Eso es solo parte del argumento.')">b) El problema de leer fragmentos cortos.</button>
+            <button class="opcion" onclick="responder(this,'q4',true,'Correcto. El tema integra tanto el cambio en las prácticas lectoras como el reto que esto plantea a la universidad.')">c) Los nuevos hábitos de lectura de los jóvenes y el reto que esto plantea a la universidad.</button>
+            <button class="opcion" onclick="responder(this,'q4',false,'Esto solo describe un rasgo positivo, sin capturar el problema que plantea el texto.')">d) La cantidad de lectura que realizan los jóvenes hoy.</button>
+          </div>
+          <div class="feedback" id="q4-fb"></div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="actividad">
+          <div class="act-label">Cierre colectivo · Metacognición (4 min)</div>
+          <div class="pregunta">Cada estudiante completa oralmente la frase: "Antes creía que leer era… Ahora entiendo que…"</div>
+          <div class="nota-facilitador"><strong>Rol del facilitador:</strong> anotar en el tablero las palabras que emerjan (comprender, inferir, posición, intención). Usarlas como puente hacia la Sesión 2, que abordará la organización del texto y los tipos de párrafo.</div>
+        </div>
+
+        <div class="actividad">
+          <div class="act-label">Tarea para casa (opcional, 10–15 min)</div>
+          <div class="estrategia"><span class="paso">→</span> Leer un artículo de opinión de su elección (periódico, revista) e identificar por escrito: tema, idea central e intención. Traer a la Sesión 2 para compartir.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOJA DE RUTA -->
+  <div class="section">
+    <div class="section-title">Hoja de ruta del programa</div>
+    <div class="bloque">
+      <div class="bloque-header" onclick="toggle(this)">
+        <span class="bloque-titulo">Progresión de sesiones (referencia)</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="bloque-body open">
+        <div class="estrategia"><span class="paso">S1 ·</span> Tema, idea central e intención comunicativa <em>(esta sesión)</em></div>
+        <div class="estrategia"><span class="paso">S2 ·</span> Tipos de párrafo, progresión temática y modo expositivo vs. argumentativo</div>
+        <div class="estrategia"><span class="paso">S3 ·</span> Cohesión: deíxis, conectores y sustitución</div>
+        <div class="estrategia"><span class="paso">S4 ·</span> Figuras retóricas y marcadores discursivos en la argumentación</div>
+        <div class="estrategia"><span class="paso">S5 ·</span> Voces discursivas y evaluación de argumentos</div>
+        <div class="estrategia"><span class="paso">S6 ·</span> Simulacro completo + retroalimentación individual</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+function responder(opcion, grupoId, esCorrecta, explicacion) {
+  const grupo = document.getElementById(grupoId);
+  if (grupo.dataset.respondida) return;
+  grupo.dataset.respondida = '1';
+  grupo.querySelectorAll('.opcion').forEach(o => { o.style.pointerEvents = 'none'; });
+  opcion.classList.add(esCorrecta ? 'correcta' : 'incorrecta');
+  const fb = document.getElementById(grupoId + '-fb');
+  fb.textContent = (esCorrecta ? '✓ ' : '✗ ') + explicacion;
+  fb.className = 'feedback show ' + (esCorrecta ? 'ok' : 'mal');
+}
+</script>
+</body>
+</html>
